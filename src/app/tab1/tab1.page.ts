@@ -7,6 +7,7 @@ import { NoteService } from '../services/note.service';
 import { UIService } from '../services/ui.service';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { IonicModule } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 
@@ -68,4 +69,13 @@ export class Tab1Page {
     });
     
   } 
+
+  public async extractGeolocation() {
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      console.log('Current position:', coordinates);
+    } catch (error) {
+      console.error('Error getting location:', error);
+    }
+  }
 }

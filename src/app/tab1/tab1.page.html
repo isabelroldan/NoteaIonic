@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar color="custom-color">
     <ion-title>
       Tareas
     </ion-title>
@@ -32,13 +32,13 @@
       </ion-modal>
     </ion-item>
     <ion-toolbar>
-      <ion-button slot="start">
+      <ion-button color="custom-color" slot="start" (click)="extractGeolocation()">
         <ion-icon slot="icon-only" src="assets/icons/compass.svg"></ion-icon>
       </ion-button>
-      <ion-button slot="end" (click)="takePic()">
-        <ion-icon slot="icon-only" src="assets/icons/image.svg"></ion-icon>
+      <ion-button color="custom-color" slot="end" (click)="takePic()">
+        <ion-icon slot="icon-only" src="assets/icons/camera.svg"></ion-icon>
       </ion-button>
     </ion-toolbar>
-    <ion-button type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
+    <ion-button color="custom-color" type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
   </form>
 </ion-content>
