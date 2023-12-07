@@ -66,14 +66,17 @@ export class Tab1Page {
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Uri
-    });
-    
-  } 
+    });
+
+  }
 
   public async extractGeolocation() {
     try {
       const coordinates = await Geolocation.getCurrentPosition();
-      console.log('Current position:', coordinates);
+      //console.log('Current position:', coordinates);
+      console.log('Tu posición actual es: ');
+      console.log('Latitude:', coordinates.coords.latitude);
+      console.log('Longitude:', coordinates.coords.longitude);
     } catch (error) {
       console.error('Error getting location:', error);
     }
