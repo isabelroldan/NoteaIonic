@@ -4,5 +4,8 @@ export interface Note {
     description?:string,
     date:string
     img?:string,
-    position?:string
+    position?: {
+        latitude: number;
+        longitude: number;
+      };
 }
