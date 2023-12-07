@@ -31,6 +31,8 @@ export class Tab1Page {
   public latitude: number | null;
   public longitude: number | null;
 
+  public imageUri: string | null;
+
   constructor() {
     this.form = this.fromB.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
@@ -40,6 +42,8 @@ export class Tab1Page {
     // Inicializar las variables globales
     this.latitude = null;
     this.longitude = null;
+
+    this.imageUri = null;
   }
   
 
@@ -61,6 +65,26 @@ export class Tab1Page {
     }
   }
 
+  public async takePic() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.Uri
+      });
+  
+      // Asignar la URI de la imagen a la variable global si está disponible
+      if(image.webPath !== undefined) {
+        this.imageUri = image.webPath;
+      }
+  
+    } catch(error) {
+      console.error('Error taking photo:', error);
+      await this.UIS.showToast('Error al tomar la foto', 'warning');
+  
+    }
+  }
+
   async saveNote(): Promise<void> {
     if(!this.form.valid) return;
   
@@ -76,6 +100,11 @@ export class Tab1Page {
         latitude: this.latitude,
         longitude: this.longitude
       }
+    }
+
+    // Agregar la imagen a la nota si está disponible
+    if(this.imageUri != null) {
+      note.img = this.imageUri;
     }
   
     await this.UIS.showLoading();
@@ -121,14 +150,14 @@ export class Tab1Page {
     }
   }*/
 
-  public async takePic() {
+  /*public async takePic() {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Uri
     });
 
-  }
+  }*/
 
   /*public async extractGeolocation() {
     try {
