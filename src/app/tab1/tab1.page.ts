@@ -8,6 +8,9 @@ import { UIService } from '../services/ui.service';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
+import { CommonModule } from '@angular/common';
+import * as L from 'leaflet';
+
 
 
 
@@ -16,7 +19,7 @@ import { Geolocation } from '@capacitor/geolocation';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule, ExploreContainerComponent, IonicModule],
+  imports: [ FormsModule, ReactiveFormsModule, ExploreContainerComponent, IonicModule, CommonModule],
 })
 export class Tab1Page {
 
@@ -57,6 +60,9 @@ export class Tab1Page {
       // Guardar la latitud y longitud en variables globales
       this.latitude = coordinates.coords.latitude;
       this.longitude = coordinates.coords.longitude;
+
+      // Llamar a la función para mostrar el mapa
+      this.showMap(this.latitude, this.longitude); //////////////////////
   
     } catch(error) {
       console.error('Error getting location:', error);
@@ -123,6 +129,19 @@ export class Tab1Page {
   
     }
   }
+
+  showMap(latitude: number, longitude: number): void {
+    const map = L.map('map').setView([latitude, longitude], 13);
+  
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+  
+    L.marker([latitude, longitude]).addTo(map)
+      .bindPopup('Tu ubicación actual')
+      .openPopup();
+  }
+  
 
   /*async saveNote(): Promise<void> {
     if(!this.form.valid) return;

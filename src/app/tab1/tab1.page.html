@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<!--<ion-header [translucent]="true">
   <ion-toolbar color="custom-color">
     <ion-title>
       Tareas
@@ -41,4 +41,61 @@
     </ion-toolbar>
     <ion-button color="custom-color" type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
   </form>
+</ion-content>-->
+
+<ion-header [translucent]="true">
+  <ion-toolbar color="custom-color">
+    <ion-title>
+      Tareas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form" (ngSubmit)="saveNote()">
+    <ion-item>
+      <ion-label>
+        Title
+      </ion-label>
+      <ion-input type="text" formControlName="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Description
+      </ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Date
+      </ion-label>
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="datetime"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+    <ion-toolbar>
+      <ion-button color="custom-color" slot="start" (click)="extractGeolocation()">
+        <ion-icon slot="icon-only" src="assets/icons/compass.svg"></ion-icon>
+      </ion-button>
+      <ion-button color="custom-color" slot="end" (click)="takePic()" *ngIf="imageUri === null || imageUri === undefined">
+        <ion-icon slot="icon-only" src="assets/icons/camera.svg"></ion-icon>
+      </ion-button>
+    </ion-toolbar>
+    <ion-button id="close-button" *ngIf="imageUri !== null" color="danger" fill="clear" (click)="imageUri = null">
+      <ion-icon name="close" src="assets/icons/close-circle-outline.svg"></ion-icon>
+    </ion-button>
+    <ion-img *ngIf="imageUri !== null" [src]="imageUri"></ion-img>
+    <ion-button color="custom-color" type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
+
+
+    <!-- Div para el mapa -->
+  <div id="map" style="height: 300px;"></div>
+
+
+  </form>
 </ion-content>
+
+
