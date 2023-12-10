@@ -84,7 +84,8 @@
       <ion-button color="custom-color" slot="start" (click)="extractGeolocation()">
         <ion-icon slot="icon-only" src="assets/icons/compass.svg"></ion-icon>
       </ion-button>
-      <ion-button color="custom-color" slot="end" (click)="takePic()" *ngIf="imageUri === null || imageUri === undefined">
+      <ion-button color="custom-color" slot="end" (click)="takePic()"
+        *ngIf="imageUri === null || imageUri === undefined">
         <ion-icon slot="icon-only" src="assets/icons/camera.svg"></ion-icon>
       </ion-button>
     </ion-toolbar>
@@ -92,14 +93,12 @@
       <ion-icon name="close" src="assets/icons/close-circle-outline.svg"></ion-icon>
     </ion-button>
     <ion-img *ngIf="imageUri !== null" [src]="imageUri"></ion-img>
-    <ion-button color="custom-color" type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
 
 
     <!-- Div para el mapa -->
-  <div id="map" ></div>
+    <div id="map"></div>
 
+    <ion-button color="custom-color" type="submit" expand="full" [disabled]="!form.valid">Submit</ion-button>
 
   </form>
 </ion-content>
-
-
