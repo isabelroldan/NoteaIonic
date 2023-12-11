@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { IonButton, IonHeader, IonContent, IonDatetime, IonDatetimeButton, IonIcon, IonItem, IonLabel, IonListHeader, IonModal, IonTitle, IonToolbar, LoadingController, IonInput } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -39,6 +39,7 @@ export class Tab1Page {
   public map: any;
   public marker: any;
 
+  mapLoaded: boolean = false;
 
   constructor() {
     this.form = this.fromB.group({
@@ -56,6 +57,7 @@ export class Tab1Page {
 
   public async extractGeolocation() {
     try {
+      this.mapLoaded = true;
       const coordinates = await Geolocation.getCurrentPosition();
       console.log('Tu posición actual es: ');
       console.log('Latitude:', coordinates.coords.latitude);
@@ -134,6 +136,11 @@ export class Tab1Page {
   }
 
   showMap(latitude: number, longitude: number): void {
+
+    if (this.map) {
+      this.map.remove();
+      this.map = null;
+    }
     // Configurar la ruta de las imágenes del icono del marcador
     L.Icon.Default.imagePath = 'assets/leaflet/images/';
 
@@ -147,8 +154,10 @@ export class Tab1Page {
 
 
       this.marker = L.marker([latitude, longitude]).addTo(this.map)
-        .bindPopup('Tu ubicación actual')
+      .bindPopup('Tu ubicación actual es:\nLatitud: ' + latitude.toFixed(4) + '\nLongitud: ' + longitude.toFixed(4))
         .openPopup();
+
+        
     } else {
       // Si el mapa ya está creado, simplemente actualiza la posición del marcador
       this.marker.setLatLng([latitude, longitude]).update();
