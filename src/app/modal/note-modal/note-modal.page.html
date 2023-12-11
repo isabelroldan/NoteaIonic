@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ note.title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Mostrar otros detalles de la nota según sea necesario -->
+  <ion-card>
+    <ion-card-content>
+      {{ note.title }}
+    </ion-card-content>
+    <ion-card-content *ngIf="note.description">
+      Descripción: {{ note.description }}
+    </ion-card-content>
+    <ion-card-content>
+      Fecha: {{ note.date }}
+    </ion-card-content>
+    <ion-card-content *ngIf="note.img">
+      <img [src]="note.img" alt="Imagen de la nota">
+    </ion-card-content>
+    <ion-card-content *ngIf="note.position">
+      Latitud: {{ note.position.latitude }} | Longitud: {{ note.position.longitude }}
+    </ion-card-content>
+  </ion-card>
+  <!-- Agregar más detalles según tus necesidades -->
+</ion-content>
