@@ -54,8 +54,8 @@ export class NoteService {
         resolve(this.myCollection.doc(note.key).delete());
       } catch(err) {
         reject(err);
-      }
-    })
-  }
+      }
+    })
+  }
 
 }
