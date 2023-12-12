@@ -40,7 +40,7 @@ export class Tab2Page {
             Fecha: ${note.date}
           </div>
           <div *ngIf='note.img'>
-            <img [src]='note.img' alt='Imagen de la nota' class="thumbnail-img">
+            <img src='${note.img}' alt='Imagen de la nota'>
           </div>
           <div *ngIf='note.position'>
             Latitud: ${note.position?.latitude} | Longitud: ${note.position?.longitude}
@@ -49,19 +49,20 @@ export class Tab2Page {
       `,
       buttons: ['OK']
     });
-  
+
     // Obtén el elemento del mensaje
     const messageElement = await alert.querySelector('.alert-message');
-  
+
     // Verifica si el elemento existe y no es nulo antes de manipularlo
     if (messageElement && messageElement.textContent !== null) {
       // Establece el HTML del mensaje
       messageElement.innerHTML = messageElement.textContent;
     }
-  
+
     await alert.present();
   }
-  
+
+
 
   editNote(){
 
