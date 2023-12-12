@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { IonContent, IonHeader, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Note } from '../model/note';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-tab2',
@@ -24,7 +25,7 @@ export class Tab2Page {
     this.noteS.readAll()
   }
 
-  async presentAlert(note: any) {
+  /*async presentAlert(note: any) {
     const alert = await this.alertController.create({
       header: 'Detalles de la Nota',
       subHeader: 'A Sub Header Is Optional',
@@ -60,7 +61,63 @@ export class Tab2Page {
     }
 
     await alert.present();
+  }*/
+
+  async presentAlert(note: any) {
+    const alert = await this.alertController.create({
+      header: 'Detalles de la Nota',
+      subHeader: 'A Sub Header Is Optional',
+      message: `
+        <div class="alert-message">
+          <div>
+            ${note.title}
+          </div>
+          <div *ngIf='note.description'>
+            Descripción: ${note.description}
+          </div>
+          <div>
+            Fecha: ${note.date}
+          </div>
+          <div *ngIf='note.img'>
+            <img src='${note.img}' alt='Imagen de la nota'>
+          </div>
+          <div *ngIf='note.position'>
+            <div id="map" style="height: 200px;"></div>
+          </div>
+        </div>
+      `,
+      buttons: ['OK']
+    });
+
+    // Obtén el elemento del mensaje
+    const messageElement = await alert.querySelector('.alert-message');
+
+    // Verifica si el elemento existe y no es nulo antes de manipularlo
+    if (messageElement && messageElement.textContent !== null) {
+      // Establece el HTML del mensaje
+      messageElement.innerHTML = messageElement.textContent;
+    }
+  
+    await alert.present();
+  
+    // Obtén el elemento del mapa
+    const mapElement = document.getElementById('map');
+  
+    if (mapElement && note.position) {
+      // Crea un mapa Leaflet
+      const map = L.map(mapElement).setView([note.position.latitude, note.position.longitude], 13);
+  
+      // Añade una capa de mosaico (puedes ajustar la URL del mosaico según tus necesidades)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+  
+      // Añade un marcador en la ubicación
+      L.marker([note.position.latitude, note.position.longitude]).addTo(map);
+    }
   }
+  
+
 
 
 
