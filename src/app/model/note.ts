@@ -5,7 +5,7 @@ export interface Note {
     date:string
     img?:string,
     position?: {
-        latitude: number;
-        longitude: number;
+        latitude: number | null;
+        longitude: number | null;
       };
 }
