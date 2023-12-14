@@ -43,7 +43,7 @@
 
             <div *ngIf="note.position" class="ion-padding" slot="content">
               <div id="{{'map-' + (note.key ?? 'default')}}" style="height: 200px;"></div>
-              {{ initializeMap(note.key ?? 'default', note.position.latitude, note.position.longitude) }}
+              {{ initializeMap(note.key ?? 'default', note.position.latitude ?? 0, note.position.longitude ?? 0) }}
             </div>
             
             
