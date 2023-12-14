@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { NoteModalPage } from '../modal/note-modal/note-modal.page';
+import { UIService } from '../services/ui.service';
 
 
 @Component({
@@ -25,6 +26,8 @@ export class Tab2Page {
   private selectedNote: Note | null = null;
 
   editForm: FormGroup;
+
+  private UIS = inject(UIService);
 
   constructor(private alertController: AlertController, private formBuilder: FormBuilder, private noteService: NoteService, private modalCtrl: ModalController) {
     // Inicializa el formulario con los campos que deseas editar
@@ -384,6 +387,7 @@ export class Tab2Page {
     if (role === 'confirm') {
       this.noteS.updateNote(data);
       //Añadir toast satisfactorio
+      await this.UIS.showToast('Nota modificada correctamente', 'success');
     }
   }
   
