@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Note } from 'src/app/model/note';
-import { ModalController } from '@ionic/angular/standalone';
+import { ModalController, NavParams } from '@ionic/angular/standalone';
+import { NoteService } from 'src/app/services/note.service';
 
 @Component({
   selector: 'app-note-modal',
@@ -12,12 +13,24 @@ import { ModalController } from '@ionic/angular/standalone';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class NoteModalPage {
+export class NoteModalPage implements OnInit {
   @Input() note!: Note;
 
-  constructor(private modalController: ModalController) {}
+  public noteS: NoteService
 
-  closeModal() {
-    this.modalController.dismiss();
+  constructor(noteS:NoteService, private modalCtrl: ModalController,) {
+    this.noteS = noteS;
+  }
+
+  ngOnInit() {
+    console.log(this.note);
+  }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    return this.modalCtrl.dismiss(this.note, 'confirm');
   }
 }

@@ -8,6 +8,9 @@ import { Note } from '../model/note';
 import * as L from 'leaflet';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Capacitor } from '@capacitor/core';
+import { ModalController } from '@ionic/angular';
+import { NoteModalPage } from '../modal/note-modal/note-modal.page';
+
 
 @Component({
   selector: 'app-tab2',
@@ -23,7 +26,7 @@ export class Tab2Page {
 
   editForm: FormGroup;
 
-  constructor(private alertController: AlertController, private formBuilder: FormBuilder) {
+  constructor(private alertController: AlertController, private formBuilder: FormBuilder, private noteService: NoteService, private modalCtrl: ModalController) {
     // Inicializa el formulario con los campos que deseas editar
     this.editForm = this.formBuilder.group({
       title: ['', Validators.required],
@@ -113,6 +116,9 @@ export class Tab2Page {
       L.marker([latitude, longitude]).addTo(map);
     }
   }
+
+  
+  
   
   
 
@@ -195,7 +201,7 @@ export class Tab2Page {
 
   }*/
 
-  async editNote(note: any) {
+  /*async editNote(note: any) {
     this.editForm.setValue({
       title: note.title,
       description: note.description || '',
@@ -271,7 +277,118 @@ export class Tab2Page {
     }
 
     await alert.present();
+  }*/
+
+  /*async editNote(note: any) {
+    this.editForm.setValue({
+      title: note.title,
+      description: note.description || '',
+      img: note.img || '',
+      position: {
+        latitude: note.position?.latitude || '',
+        longitude: note.position?.longitude || ''
+      },
+      date: note.date
+    });
+  
+    const alert = await this.alertController.create({
+      header: 'Editar Nota',
+      message: `
+      <ion-label>
+        <ion-input formControlName="title" value=${note.title}></ion-input>
+      </ion-label>
+      <ion-label *ngIf="editForm.get('description')?.value">
+        <ion-textarea formControlName="description" value=${note.description}></ion-textarea>
+      </ion-label>
+      <ion-label *ngIf="editForm.get('date')?.value">
+        <ion-textarea formControlName="date" value=${note.date}></ion-textarea>
+      </ion-label>
+      
+        <div>
+          <img src='${note.img}' alt='Imagen de la nota'>
+        </div>
+      
+        <div *ngIf='note.position'>
+          <div id="map" style="height: 200px;"></div>
+        </div>
+      <!-- Ajusta otros campos según tu modelo de nota -->
+    `,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            // Manejar cancelación
+          }
+        },
+        {
+          text: 'Borrar',
+          handler: () => {
+            // No hagas nada
+          }
+        },
+        {
+          text: 'Guardar',
+          handler: () => {
+            const newNote = {
+              key: note.key,
+              title: this.editForm.get('title')?.value,
+              description: this.editForm.get('description')?.value,
+              img: this.editForm.get('img')?.value,
+              position: this.editForm.get('position')?.value,
+              date: this.editForm.get('date')?.value
+            };
+            this.noteService.updateNote(newNote);
+          }
+        }
+      ]
+    });
+  
+    const messageElement = await alert.querySelector('.alert-message');
+  
+    if(messageElement && messageElement.textContent !== null){
+      messageElement.innerHTML = messageElement.textContent;
+    }
+  
+    // Obtén el elemento del mapa
+    L.Icon.Default.imagePath = 'assets/leaflet/images/';
+    const mapElement = document.getElementById('map');
+  
+    if (mapElement && note.position) {
+      // Crea un mapa Leaflet
+      const map = L.map(mapElement).setView([note.position.latitude, note.position.longitude], 13);
+  
+      // Añade una capa de mosaico (puedes ajustar la URL del mosaico según tus necesidades)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+  
+      // Añade un marcador en la ubicación
+      L.marker([note.position.latitude, note.position.longitude]).addTo(map);
+    }
+  
+    await alert.present();
+  }*/
+
+
+  async editNote(note: Note) {
+    console.log(note);
+    const modal = await this.modalCtrl.create({
+      component: NoteModalPage,
+      componentProps: { note: note },
+    });
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'confirm') {
+      this.noteS.updateNote(data);
+      //Añadir toast satisfactorio
+    }
   }
+  
+  
+  
 
   /*private buildEditFormHtml(): string {
     return `
