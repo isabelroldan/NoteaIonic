@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { NoteService } from '../services/note.service';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonHeader, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonTitle, IonToolbar, Platform } from '@ionic/angular/standalone';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Note } from '../model/note';
 import * as L from 'leaflet';
@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { NoteModalPage } from '../modal/note-modal/note-modal.page';
 import { UIService } from '../services/ui.service';
+import { BehaviorSubject, Observable, from, map, mergeMap, tap, toArray } from 'rxjs';
 
 
 @Component({
@@ -29,7 +30,15 @@ export class Tab2Page {
 
   private UIS = inject(UIService);
 
-  constructor(private alertController: AlertController, private formBuilder: FormBuilder, private noteService: NoteService, private modalCtrl: ModalController) {
+  private notesPerPage:number = 15;
+
+  public _notes$:BehaviorSubject<Note[]> = new BehaviorSubject<Note[]>([]);
+
+  private lastNote:Note|undefined=undefined;
+
+  public isInfiniteScrollAvailable:boolean = true;
+
+  constructor(private alertController: AlertController, private formBuilder: FormBuilder, private noteService: NoteService, private modalCtrl: ModalController, public platform:Platform) {
     // Inicializa el formulario con los campos que deseas editar
     this.editForm = this.formBuilder.group({
       title: ['', Validators.required],
@@ -44,8 +53,63 @@ export class Tab2Page {
   }
 
   ionViewDidEnter() {
-    this.noteS.readAll()
+    //this.noteS.readAll()
+
+    this.platform.ready().then(() => {
+      console.log(this.platform.height());
+      this.notesPerPage=Math.round(this.platform.height()/50);
+      this.loadNotes(true);
+    });
   }
+
+  loadNotes(fromFirst:boolean, event?:any){
+    console.log(this._notes$.getValue());
+    
+    if(fromFirst==false && this.lastNote==undefined){
+      this.isInfiniteScrollAvailable=false;
+      event.target.complete();
+      return;
+    } 
+    this.convertPromiseToObservableFromFirebase(this.noteS.readNext(this.lastNote,this.notesPerPage)).subscribe(d=>{
+      event?.target.complete();
+      if(fromFirst){
+        this._notes$.next(d);
+      }else{
+        this._notes$.next([...this._notes$.getValue(),...d]);
+        if(d.length<this.notesPerPage){
+          this.isInfiniteScrollAvailable=false;
+        }
+      }
+    })
+    
+  }
+
+  private convertPromiseToObservableFromFirebase(promise: Promise<any>): Observable<Note[]> {
+    return from(promise).pipe(
+      tap(d=>{
+        if(d.docs && d.docs.length>=this.notesPerPage){
+          this.lastNote=d.docs[d.docs.length-1];
+        }else{
+          this.lastNote=undefined;
+        }
+      }),
+      mergeMap(d =>  d.docs),
+      map(d => {
+        return {key:(d as any).id,...(d as any).data()};
+      }),
+      toArray()
+    );
+  }
+
+  doRefresh(event: any) {
+    this.isInfiniteScrollAvailable=true;
+    this.loadNotes(true,event);
+  }
+
+  loadMore(event: any) {
+    this.loadNotes(false,event);
+  }
+
 
   /*async presentAlert(note: any) {
     const alert = await this.alertController.create({
