@@ -10,6 +10,7 @@ import { IonicModule } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -34,14 +35,14 @@ export class Tab1Page {
   public latitude: number | null;
   public longitude: number | null;
 
-  public imageUri: string | null;
+  public imageBase64: string | null;
 
   public map: any;
   public marker: any;
 
   mapLoaded: boolean = false;
 
-  constructor() {
+  constructor(public sanitizer: DomSanitizer) {
     this.form = this.fromB.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
       description: ['']
@@ -51,7 +52,7 @@ export class Tab1Page {
     this.latitude = null;
     this.longitude = null;
 
-    this.imageUri = null;
+    this.imageBase64 = null;
   }
 
   /**
@@ -84,14 +85,15 @@ export class Tab1Page {
   public async takePic() {
     try {
       const image = await Camera.getPhoto({
-        quality: 90,
+        quality: 60,
         allowEditing: true,
-        resultType: CameraResultType.Uri
+        resultType: CameraResultType.Base64
       });
 
       // Asignar la URI de la imagen a la variable global si está disponible
-      if (image.webPath !== undefined) {
-        this.imageUri = image.webPath;
+      if (image.base64String !== undefined) {
+        this.imageBase64 = image.base64String;
+        console.log(this.imageBase64);
       }
 
     } catch (error) {
@@ -121,8 +123,8 @@ export class Tab1Page {
       }
     }
 
-    if (this.imageUri != null) {
-      note.img = this.imageUri;
+    if (this.imageBase64 != null) {
+      note.img = this.imageBase64;
     }
 
     await this.UIS.showLoading();
