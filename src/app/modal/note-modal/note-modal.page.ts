@@ -20,30 +20,41 @@ export class NoteModalPage implements OnInit, AfterViewInit {
   public noteS: NoteService
   private map!: L.Map;
 
-  constructor(noteS:NoteService, private modalCtrl: ModalController,) {
+  constructor(noteS: NoteService, private modalCtrl: ModalController,) {
     this.noteS = noteS;
   }
 
+  /**
+ * Lifecycle hook that is called when the component is initialized.
+ * Log the value of the 'note' property
+ */
   ngOnInit() {
     console.log(this.note);
   }
 
+  /**
+ * Lifecycle hook that is called after the view has been initialized.
+ * Call the initializeMap() method if the note has a position
+ */
   ngAfterViewInit() {
     if (this.note.position) {
       this.initializeMap();
     }
   }
 
+  /**
+ * Initializes the map.
+ */
   initializeMap() {
     if (!this.map) { // Verificar si el mapa ya se ha inicializado
       const mapElement = document.getElementById('map');
       if (mapElement) {
         this.map = L.map(mapElement).setView([this.note.position?.latitude ?? 0, this.note.position?.longitude ?? 0], 16);
-  
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map);
-  
+
         if (this.note.position?.latitude && this.note.position?.longitude) {
           L.marker([this.note.position.latitude, this.note.position.longitude]).addTo(this.map);
         }
@@ -51,6 +62,9 @@ export class NoteModalPage implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+ * Removes the map.
+ */
   removeMap() {
     if (this.note.position) {
       this.note.position.latitude = null;
@@ -61,21 +75,32 @@ export class NoteModalPage implements OnInit, AfterViewInit {
     }
   }
 
-  
-
+  /**
+ * Cancels the modal.
+ * 
+ * @returns A promise that resolves when the modal is dismissed with a 'cancel' role.
+ */
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
+  /**
+ * Confirms the modal.
+ * 
+ * @returns A promise that resolves when the modal is dismissed with a 'confirm' role.
+ */
   confirm() {
-    console.log("Segundo..."+ this.note.img);
-    console.log("Tercero..."+ this.note);
+    console.log("Segundo..." + this.note.img);
+    console.log("Tercero..." + this.note);
     return this.modalCtrl.dismiss(this.note, 'confirm');
   }
 
+  /**
+ * Removes the image from the note.
+ */
   removeImage() {
     this.note.img = "";
-    console.log("Primero...."+this.note.img);
+    console.log("Primero...." + this.note.img);
 
   }
 }

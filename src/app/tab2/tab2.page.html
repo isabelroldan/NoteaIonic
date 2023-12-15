@@ -8,44 +8,32 @@
 
 <ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing..."
-    ></ion-refresher-content>
+    <ion-refresher-content pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing..."></ion-refresher-content>
   </ion-refresher>
 
-
-  
-    <ion-list>
-      @for(note of this.noteS.notes$ | async ; track $index){
+  <ion-list>
+    @for(note of this.noteS.notes$ | async ; track $index){
       <ion-item-sliding>
         <ion-item-options side="start">
           <ion-item-option color="primary" expandable="true">
-            <ion-icon slot="start" src="assets/icons/pencil-outline.svg" style="zoom: 1.5" (click)="editNote(note)"></ion-icon>
+            <ion-icon slot="start" src="assets/icons/pencil-outline.svg" style="zoom: 1.5"
+              (click)="editNote(note)"></ion-icon>
           </ion-item-option>
         </ion-item-options>
-    
-        <!--<ion-item (click)="presentAlert(note)">-->
-        <!--<ion-item (click)="presentAlert(note)">
-          <ion-label>{{note.title}}</ion-label>
-        </ion-item>-->
 
-        <!--meter acordeon-->
         <ion-accordion-group color="light">
           <ion-accordion value="first" color="light">
             <ion-item slot="header" color="light">
               <ion-label>{{note.title}}</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content">
-              <ion-label>{{note.description}}</ion-label>          
+              <ion-label>{{note.description}}</ion-label>
             </div>
             <div class="ion-padding" slot="content">
               <ion-label slot="start">{{note.date}}</ion-label>
-              
+
             </div>
-            <!--<div class="ion-padding" slot="content"><ion-label>{{note.position?.latitude}}</ion-label></div>
-            <div class="ion-padding" slot="content"><ion-label>{{note.position?.longitude}}</ion-label></div>-->
             <div class="ion-padding" slot="content" *ngIf="note.img">
               <img src="{{note.img}}" alt="Imagen de la nota">
 
@@ -55,27 +43,23 @@
               <div id="{{'map-' + (note.key ?? 'default')}}" style="height: 200px;"></div>
               {{ initializeMap(note.key ?? 'default', note.position.latitude ?? 0, note.position.longitude ?? 0) }}
             </div>
-            
-            
-            
-          
-
           </ion-accordion>
         </ion-accordion-group>
-    
+
         <ion-item-options side="end">
           <ion-item-option color="danger" expandable="true">
-            <ion-icon slot="start" src="assets/icons/trash-outline.svg" style="zoom: 1.5" (click)="removeNote(note)"></ion-icon>
+            <ion-icon slot="start" src="assets/icons/trash-outline.svg" style="zoom: 1.5"
+              (click)="removeNote(note)"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     }
-    </ion-list>
-  
+  </ion-list>
 
   @if(isInfiniteScrollAvailable){
     <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more notes..."></ion-infinite-scroll-content>
+      <ion-infinite-scroll-content loadingSpinner="bubbles"
+        loadingText="Loading more notes..."></ion-infinite-scroll-content>
     </ion-infinite-scroll>
   }
 

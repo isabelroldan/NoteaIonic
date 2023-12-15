@@ -54,7 +54,9 @@ export class Tab1Page {
     this.imageUri = null;
   }
 
-
+  /**
+ * Extracts the current geolocation.
+ */
   public async extractGeolocation() {
     try {
       this.mapLoaded = true;
@@ -68,7 +70,7 @@ export class Tab1Page {
       this.longitude = coordinates.coords.longitude;
 
       // Llamar a la función para mostrar el mapa
-      this.showMap(this.latitude, this.longitude); //////////////////////
+      this.showMap(this.latitude, this.longitude); 
     } catch (error) {
       console.error('Error getting location:', error);
       await this.UIS.showToast('Error al obtener la ubicación', 'warning');
@@ -76,6 +78,9 @@ export class Tab1Page {
     }
   }
 
+  /**
+ * Takes a photo using the device camera.
+ */
   public async takePic() {
     try {
       const image = await Camera.getPhoto({
@@ -96,6 +101,10 @@ export class Tab1Page {
     }
   }
 
+  /**
+ * Saves a note.
+ * @returns A promise that resolves when the note is saved.
+ */
   async saveNote(): Promise<void> {
     if (!this.form.valid) return;
 
@@ -105,7 +114,6 @@ export class Tab1Page {
       date: Date.now().toLocaleString()
     }
 
-    // Agregar la posición a la nota si está disponible
     if (this.latitude != null && this.longitude != null) {
       note.position = {
         latitude: this.latitude,
@@ -113,7 +121,6 @@ export class Tab1Page {
       }
     }
 
-    // Agregar la imagen a la nota si está disponible
     if (this.imageUri != null) {
       note.img = this.imageUri;
     }
@@ -135,13 +142,18 @@ export class Tab1Page {
     }
   }
 
+  /**
+ * Shows a map with the specified latitude and longitude.
+ * @param latitude - The latitude of the location to be shown on the map.
+ * @param longitude - The longitude of the location to be shown on the map.
+ */
   showMap(latitude: number, longitude: number): void {
 
     if (this.map) {
       this.map.remove();
       this.map = null;
     }
-    // Configurar la ruta de las imágenes del icono del marcador
+
     L.Icon.Default.imagePath = 'assets/leaflet/images/';
 
     if (!this.map) {
@@ -159,58 +171,7 @@ export class Tab1Page {
 
         
     } else {
-      // Si el mapa ya está creado, simplemente actualiza la posición del marcador
       this.marker.setLatLng([latitude, longitude]).update();
     }
   }
-
-
-
-
-  /*async saveNote(): Promise<void> {
-    if(!this.form.valid) return;
-
-    let note: Note = {
-      title: this.form.get("title")?.value,
-      description: this.form.get("description")?.value,
-      date: Date.now().toLocaleString()  
-    }
-
-    await this.UIS.showLoading();
-
-    try {
-      await this.noteService.addNote(note);
-      await this.UIS.showToast('Nota introducida correctamente', 'success');
-      this.form.reset();
-
-    } catch(err) {
-      console.error(err);
-      await this.UIS.showToast('Error al introducir la nota', 'warning');
-
-    } finally {
-      await this.UIS.hideLoading();
-
-    }
-  }*/
-
-  /*public async takePic() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
-    });
-
-  }*/
-
-  /*public async extractGeolocation() {
-    try {
-      const coordinates = await Geolocation.getCurrentPosition();
-      //console.log('Current position:', coordinates);
-      console.log('Tu posición actual es: ');
-      console.log('Latitude:', coordinates.coords.latitude);
-      console.log('Longitude:', coordinates.coords.longitude);
-    } catch (error) {
-      console.error('Error getting location:', error);
-    }
-  }*/
 }
