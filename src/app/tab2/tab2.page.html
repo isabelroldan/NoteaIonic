@@ -30,8 +30,12 @@
             <div class="ion-padding" slot="content">
               <ion-label>{{note.description}}</ion-label>
             </div>
-            <div class="ion-padding" slot="content">
+            <!--<div class="ion-padding" slot="content">
               <ion-label slot="start">{{note.date}}</ion-label>
+
+            </div>-->
+            <div class="ion-padding" slot="content">
+              <ion-label slot="start">{{ formatDate(note.date) }}</ion-label>
 
             </div>
             <div class="ion-padding" slot="content" *ngIf="note.img">

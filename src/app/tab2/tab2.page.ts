@@ -21,6 +21,8 @@ import { BehaviorSubject, Observable, from, map, mergeMap, tap, toArray } from '
   standalone: true,
   imports: [ExploreContainerComponent, CommonModule, IonicModule]
 })
+
+
 export class Tab2Page {
   public noteS = inject(NoteService);
 
@@ -37,6 +39,7 @@ export class Tab2Page {
   private lastNote: Note | undefined = undefined;
 
   public isInfiniteScrollAvailable: boolean = true;
+  
 
   constructor(private alertController: AlertController, private formBuilder: FormBuilder, private noteService: NoteService, private modalCtrl: ModalController, public platform: Platform) {
     // Inicializa el formulario con los campos que deseas editar
@@ -135,6 +138,42 @@ export class Tab2Page {
   }
 
 
+  formatDate(dateString: string): string {
+    try {
+      // Remover puntos y comas de la cadena antes de intentar crear la fecha
+      const cleanedDateString = dateString.replace(/[.,]/g, '');
+  
+      // Validar si la cadena parece tener el formato esperado
+      const regex = /^\d{1,14}$/;
+      if (!regex.test(cleanedDateString)) {
+        throw new Error('Formato de fecha no válido. Cadena recibida: ' + dateString);
+      }
+  
+      // Crear la fecha
+      const date = new Date(Number(cleanedDateString));
+  
+      if (!isNaN(date.getTime())) {
+        const options: Intl.DateTimeFormatOptions = {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        };
+        return date.toLocaleDateString('es-ES', options);
+      } else {
+        throw new Error('Fecha no válida: Valor de getTime() no es un número finito. Cadena recibida: ' + dateString);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error al formatear la fecha:', error.message);
+      } else {
+        console.error('Error al formatear la fecha:', error);
+      }
+      return 'Fecha no válida';
+    }
+  }
 
   initializeMap(noteKey: string, latitude: number, longitude: number) {
 
