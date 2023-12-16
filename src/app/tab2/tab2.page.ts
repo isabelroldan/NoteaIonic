@@ -175,7 +175,7 @@ export class Tab2Page {
     }
   }
 
-  initializeMap(noteKey: string, latitude: number, longitude: number) {
+  /*initializeMap(noteKey: string, latitude: number, longitude: number) {
 
     const mapElement = document.getElementById(`map-${noteKey}`);
 
@@ -189,15 +189,63 @@ export class Tab2Page {
 
       L.marker([latitude, longitude]).addTo(map);
     }
-  }
+  }*/
 
-  /**
+   /**
  * Initializes a map element with the given latitude and longitude.
  * 
  * @param noteKey The key of the note.
  * @param latitude The latitude coordinate.
  * @param longitude The longitude coordinate.
  */
+  /*initializeMap(noteKey: string, latitude: number, longitude: number) {
+    const mapElement = document.getElementById(`map-${noteKey}`);
+  
+    if (mapElement && !mapElement.hasChildNodes()) {
+      const map = L.map(mapElement).setView([latitude, longitude], 13);
+  
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+  
+      const iconUrl = 'assets/leaflet/images/marker-icon.png';
+      const shadowUrl = 'assets/leaflet/images/marker-shadow.png';
+  
+      const defaultIcon = L.icon({
+        iconUrl: iconUrl,
+        shadowUrl: shadowUrl,
+      });
+  
+      L.marker([latitude, longitude], { icon: defaultIcon }).addTo(map);
+    }
+  }
+  */
+
+  initializeMap(noteKey: string, latitude: number, longitude: number) {
+    const mapElement = document.getElementById(`map-${noteKey}`);
+  
+    if (mapElement && !mapElement.hasChildNodes()) {
+      setTimeout(() => {
+        const map = L.map(mapElement).setView([latitude, longitude], 13);
+  
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+  
+        const iconUrl = 'assets/leaflet/images/marker-icon.png';
+        const shadowUrl = 'assets/leaflet/images/marker-shadow.png';
+  
+        const defaultIcon = L.icon({
+          iconUrl: iconUrl,
+          shadowUrl: shadowUrl,
+        });
+  
+        L.marker([latitude, longitude], { icon: defaultIcon }).addTo(map);
+      }, 5000); // Delay of 1 second (adjust as needed)
+    }
+  }
+
+ 
 
   async editNote(note: Note) {
     console.log(note);

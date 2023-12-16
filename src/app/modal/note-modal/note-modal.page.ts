@@ -45,7 +45,59 @@ export class NoteModalPage implements OnInit, AfterViewInit {
   /**
  * Initializes the map.
  */
+  /*initializeMap() {
+    if (!this.map) { // Verificar si el mapa ya se ha inicializado
+      const mapElement = document.getElementById('map');
+      if (mapElement) {
+        this.map = L.map(mapElement).setView([this.note.position?.latitude ?? 0, this.note.position?.longitude ?? 0], 16);
+  
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(this.map);
+  
+        if (this.note.position?.latitude && this.note.position?.longitude) {
+          const iconUrl = 'assets/leaflet/images/marker-icon.png';
+          const shadowUrl = 'assets/leaflet/images/marker-shadow.png';
+  
+          const defaultIcon = L.icon({
+            iconUrl: iconUrl,
+            shadowUrl: shadowUrl,
+          });
+  
+          L.marker([this.note.position.latitude, this.note.position.longitude], { icon: defaultIcon }).addTo(this.map);
+        }
+      }
+    }
+  }*/
+
   initializeMap() {
+    if (!this.map) { // Verificar si el mapa ya se ha inicializado
+      setTimeout(() => {
+        const mapElement = document.getElementById('map');
+        if (mapElement) {
+          this.map = L.map(mapElement).setView([this.note.position?.latitude ?? 0, this.note.position?.longitude ?? 0], 16);
+  
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(this.map);
+  
+          if (this.note.position?.latitude && this.note.position?.longitude) {
+            const iconUrl = 'assets/leaflet/images/marker-icon.png';
+            const shadowUrl = 'assets/leaflet/images/marker-shadow.png';
+  
+            const defaultIcon = L.icon({
+              iconUrl: iconUrl,
+              shadowUrl: shadowUrl,
+            });
+  
+            L.marker([this.note.position.latitude, this.note.position.longitude], { icon: defaultIcon }).addTo(this.map);
+          }
+        }
+      }, 5000); // Delay of 5 seconds
+    }
+  }
+  
+  /*initializeMap() {
     if (!this.map) { // Verificar si el mapa ya se ha inicializado
       const mapElement = document.getElementById('map');
       if (mapElement) {
@@ -60,7 +112,7 @@ export class NoteModalPage implements OnInit, AfterViewInit {
         }
       }
     }
-  }
+  }*/
 
   /**
  * Removes the map.
