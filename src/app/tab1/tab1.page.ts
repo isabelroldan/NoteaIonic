@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { IonButton, IonHeader, IonContent, IonDatetime, IonDatetimeButton, IonIcon, IonItem, IonLabel, IonListHeader, IonModal, IonTitle, IonToolbar, LoadingController, IonInput } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,6 +11,8 @@ import { Geolocation } from '@capacitor/geolocation';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SpeechRecognition } from "@capacitor-community/speech-recognition";
+import { NgZone } from '@angular/core';
 
 
 
@@ -42,7 +44,11 @@ export class Tab1Page {
 
   mapLoaded: boolean = false;
 
-  constructor(public sanitizer: DomSanitizer) {
+  detectedText: string = '';
+
+  
+
+  constructor(public sanitizer: DomSanitizer, private cdr: ChangeDetectorRef, private ngZone: NgZone) {
     this.form = this.fromB.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
       description: ['']
@@ -176,4 +182,53 @@ export class Tab1Page {
       this.marker.setLatLng([latitude, longitude]).update();
     }
   }
+
+  async checkAndRequestPermissions() {
+    const permissionStatus = await SpeechRecognition.checkPermissions();
+    
+    if (permissionStatus.speechRecognition !== 'granted') {
+      const requestResult = await SpeechRecognition.requestPermissions();
+      
+      if (requestResult.speechRecognition !== 'granted') {
+        console.error('Permiso denegado para acceder al micrófono.');
+        // Puedes mostrar un mensaje al usuario para informar sobre la importancia de los permisos.
+        return;
+      }
+    }
+    // Continuar con el reconocimiento de voz
+    this.startSpeechRecognition();
+  }
+  
+
+  startSpeechRecognition() {
+    SpeechRecognition.available().then((result) => {
+      if (result.available) {
+        SpeechRecognition.start({
+          language: "es-ES",
+          maxResults: 1,
+          prompt: "Di algo",
+          partialResults: true,
+          popup: false,
+        }).then(() => {
+          console.log("Speech Recognition Started!!!!!!!!!!!!!!!!!!");
+          SpeechRecognition.addListener("partialResults", (data: { matches: string[]; }) => {
+            console.log("Speech Recognition Data.........:", data);
+  
+            // Utilizar ngZone.run para garantizar la detección de cambios
+            this.ngZone.run(() => {
+              this.detectedText = data.matches.join(" ");
+              console.log(this.detectedText);
+            });
+          });
+        }).catch(error => {
+          console.error("Speech Recognition Error:", error);
+        });
+      } else {
+        console.warn("Reconocimiento de voz no disponible en este dispositivo.");
+      }
+    });
+  }
+  
+  
+  
 }
