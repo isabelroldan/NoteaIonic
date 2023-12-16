@@ -22,7 +22,8 @@
       <ion-label>
         Description
       </ion-label>
-      <ion-textarea formControlName="description" >{{ detectedText }}</ion-textarea>
+      <!--<ion-textarea formControlName="description" >{{ detectedText }}</ion-textarea>-->
+      <ion-textarea formControlName="description" [value]="detectedText"></ion-textarea>
       <button (click)="checkAndRequestPermissions()">
         <ion-icon slot="icon-only" src="assets/icons/mic-outline.svg" style="font-size: 30px;"></ion-icon>
       </button>
