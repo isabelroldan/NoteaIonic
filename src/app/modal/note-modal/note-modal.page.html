@@ -17,7 +17,8 @@
     <ion-input labelPlacement="stacked" label="Description" [(ngModel)]="note.description" placeholder={{note.description}}></ion-input>
   </ion-item>
   <ion-item *ngIf="note.img">
-    <img [src]="note.img" alt="Imagen de la nota">
+    <!--<img [src]="note.img" alt="Imagen de la nota">-->
+    <img [src]="'data:image/jpeg;base64,' + note.img" alt="Imagen de la nota">
     <ion-button (click)="removeImage()">X</ion-button>
   </ion-item>
   <div *ngIf="note.position" class="ion-padding">

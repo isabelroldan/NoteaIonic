@@ -47,7 +47,7 @@
     <ion-button id="close-button" *ngIf="imageBase64 !== null" color="danger" fill="clear" (click)="imageBase64 = null">
       <ion-icon name="close" src="assets/icons/close-circle-outline.svg"></ion-icon>
     </ion-button>
-    <ion-img *ngIf="imageBase64 !== null" [src]="'data:image/jpeg;base64,' + imageBase64"></ion-img>
+    <ion-img *ngIf="imageBase64 !== null" [src]="'data:image/jpeg;base64,' + imageBase64"></ion-img><!---->
 
     <ion-button id="close-button" color="danger" fill="clear" *ngIf="mapLoaded" (click)="latitude = null; longitude = null; mapLoaded=false">
       <ion-icon name="close" src="assets/icons/close-circle-outline.svg"></ion-icon>

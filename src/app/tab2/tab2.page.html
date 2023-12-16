@@ -35,7 +35,8 @@
 
             </div>
             <div class="ion-padding" slot="content" *ngIf="note.img">
-              <img src="{{note.img}}" alt="Imagen de la nota">
+              <!--<img src="{{note.img}}" alt="Imagen de la nota">-->
+              <img [src]="'data:image/jpeg;base64,' + note.img" alt="Imagen de la nota">
 
             </div>
 
