@@ -201,9 +201,11 @@ export class Tab2Page {
             this.noteS.deleteNote(note)
               .then(() => {
                 // Eliminación exitosa, realiza cualquier acción adicional si es necesario
+                this.UIS.showToast('Nota eliminada correctamente', 'success');
               })
               .catch(error => {
                 console.error('Error al eliminar la nota', error);
+                this.UIS.showToast('Ocurrió un error, vuelva a intentarlo', 'warning');
               });
           }
         }
@@ -213,5 +215,16 @@ export class Tab2Page {
     await alert.present();
   }
 
+  handleSwipe(note: Note, event: any) {
+    const swipeDirection = event.detail.side;
+  
+    if (swipeDirection === 'start') {
+      // Deslizamiento hacia la izquierda (lado start)
+      this.editNote(note);
+    } else if (swipeDirection === 'end') {
+      // Deslizamiento hacia la derecha (lado end)
+      this.removeNote(note);
+    }
+  }
 
 }
