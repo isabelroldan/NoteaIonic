@@ -18,11 +18,11 @@
   </ion-item>
   <ion-item *ngIf="note.img">
     <!--<img [src]="note.img" alt="Imagen de la nota">-->
+    <ion-button class="close-button" (click)="removeImage()">X</ion-button>
     <img [src]="'data:image/jpeg;base64,' + note.img" alt="Imagen de la nota">
-    <ion-button (click)="removeImage()">X</ion-button>
   </ion-item>
   <div *ngIf="note.position" class="ion-padding">
+    <ion-button id="close" (click)="removeMap()">X</ion-button>
     <div id="map" style="height: 200px;width: auto;"></div>
-    <ion-button (click)="removeMap()">X</ion-button>
   </div>
 </ion-content>

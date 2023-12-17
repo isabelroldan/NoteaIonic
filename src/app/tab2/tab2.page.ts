@@ -241,7 +241,7 @@ export class Tab2Page {
         });
   
         L.marker([latitude, longitude], { icon: defaultIcon }).addTo(map);
-      }, 10000); // Delay of 1 second (adjust as needed)
+      }, 10000); 
     }
   }
 

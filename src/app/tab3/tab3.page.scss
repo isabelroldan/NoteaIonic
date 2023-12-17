@@ -1,0 +1,46 @@
+.grandes-letras {
+    font-size: 3rem;
+    animation: mover-letras 2s infinite;
+  }
+  
+  @keyframes mover-letras {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(50px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .presentation {
+    text-align: center;
+    padding: 16px;
+  }
+  
+  .presentation h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .presentation p {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  
+  .presentation a {
+    display: block;
+    margin-bottom: 16px;
+    color: #dfbdfa;
+  }
+  
+  .presentation img {
+    width: 200px;
+    height: auto;
+  }
+
+  .presentation div{
+    background-color: aliceblue;
+  }

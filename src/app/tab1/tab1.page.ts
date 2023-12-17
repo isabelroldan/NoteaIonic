@@ -51,7 +51,8 @@ export class Tab1Page {
   constructor(public sanitizer: DomSanitizer, private cdr: ChangeDetectorRef, private ngZone: NgZone) {
     this.form = this.fromB.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
-      description: ['']
+      description: [''],
+      
     })
 
     // Inicializar las variables globales
@@ -139,6 +140,10 @@ export class Tab1Page {
       await this.noteService.addNote(note);
       await this.UIS.showToast('Nota introducida correctamente', 'success');
       this.form.reset();
+      this.imageBase64 = null; 
+      this.mapLoaded = false;
+      this.latitude = null;
+      this.longitude = null;
 
     } catch (err) {
       console.error(err);

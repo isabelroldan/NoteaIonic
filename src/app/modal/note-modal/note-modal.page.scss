@@ -1,0 +1,10 @@
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1; /* Asegura que la X esté encima de la imagen */
+  }
+
+ #close{
+    margin-left: auto;
+ } 
