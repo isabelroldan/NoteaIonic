@@ -9,4 +9,8 @@ export const routes: Routes = [
     path: 'note-modal',
     loadComponent: () => import('./modal/note-modal/note-modal.page').then( m => m.NoteModalPage)
   },
+  {
+    path: 'splash',
+    loadComponent: () => import('./splash/splash.page').then( m => m.SplashPage)
+  },
 ];

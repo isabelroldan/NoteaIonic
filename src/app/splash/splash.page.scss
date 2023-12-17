@@ -1,0 +1,13 @@
+ion-content{
+    --background:black;
+}
+@-webkit-keyframes slide-fwd-center{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}100%{-webkit-transform:translateZ(160px);transform:translateZ(160px)}}@keyframes slide-fwd-center{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}100%{-webkit-transform:translateZ(160px);transform:translateZ(160px)}}
+
+.container{
+    -webkit-animation:slide-fwd-center 1s cubic-bezier(.25,.46,.45,.94) both;animation:slide-fwd-center 1s cubic-bezier(.25,.46,.45,.94) both;
+    img{
+        height: 100px;
+        margin-top: 60%;
+    }
+    
+}
