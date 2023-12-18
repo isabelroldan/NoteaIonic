@@ -65,7 +65,7 @@ export class Tab1Page {
   /**
  * Extracts the current geolocation.
  */
-  public async extractGeolocation() {
+  /*public async extractGeolocation() {
     try {
       this.mapLoaded = true;
       const coordinates = await Geolocation.getCurrentPosition();
@@ -83,6 +83,37 @@ export class Tab1Page {
       console.error('Error getting location:', error);
       await this.UIS.showToast('Error al obtener la ubicación', 'warning');
 
+    }
+  }*/
+
+  public async extractGeolocation() {
+    try {
+      this.mapLoaded = true;
+  
+      // Solicitar permisos de geolocalización
+      const permission = await Geolocation.requestPermissions();
+      if (permission) {
+        // Obtener la posición si se otorgan los permisos
+        const coordinates = await Geolocation.getCurrentPosition();
+        
+        console.log('Tu posición actual es: ');
+        console.log('Latitude:', coordinates.coords.latitude);
+        console.log('Longitude:', coordinates.coords.longitude);
+  
+        // Guardar la latitud y longitud en variables globales
+        this.latitude = coordinates.coords.latitude;
+        this.longitude = coordinates.coords.longitude;
+  
+        // Llamar a la función para mostrar el mapa
+        this.showMap(this.latitude, this.longitude); 
+      } else {
+        console.log('Permiso de geolocalización no concedido.');
+        // Manejar el caso en el que el usuario no otorga permisos
+        // Puedes mostrar un mensaje al usuario indicándole que debe otorgar permisos.
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      await this.UIS.showToast('Error al obtener la ubicación', 'warning');
     }
   }
 
